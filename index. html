@@ -1,389 +1,59 @@
-<!doctype html>
-<html lang="hi">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Locked Site — आपकी निजी साइट</title>
-<link rel="icon" href="data:;base64,iVBORw0KGgo=">
-<style>
-  :root{
-    --bg:#0f1724; --card:#0b1220; --accent:#7dd3fc; --glass: rgba(255,255,255,0.03);
-    --muted:#94a3b8;
-    font-family: "Inter", system-ui, Arial;
-  }
-  html,body{height:100%; margin:0; background: linear-gradient(180deg,#021226 0%, #08192b 100%); color:#e6eef6;}
-  .center {
-    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;
-  }
-
-  /* LOCK CARD */
-  .lock-card{ width:100%; max-width:760px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; padding:28px; box-shadow: 0 8px 30px rgba(2,6,23,0.7); backdrop-filter: blur(6px); border:1px solid rgba(255,255,255,0.03);}
-  h1{margin:0 0 8px 0; font-size:22px; letter-spacing:0.2px;}
-  p.lead{color:var(--muted); margin:0 0 16px 0;}
-  .pass-row{display:flex; gap:12px; align-items:center;}
-  input.pass{flex:1; padding:12px 14px; border-radius:10px; border:none; outline:none; background:var(--glass); color:inherit; font-size:16px;}
-  button.btn{padding:10px 14px; border-radius:10px; border:none; cursor:pointer; background:var(--accent); color:#003244; font-weight:600;}
-  .muted{color:var(--muted); font-size:13px;}
-  .shake{ animation:shake .6s; }
-  @keyframes shake{ 10%{transform:translateX(-8px)} 30%{transform:translateX(6px)} 50%{transform:translateX(-4px)} 70%{transform:translateX(2px)} 100%{transform:translateX(0)} }
-
-  /* main content hidden initially */
-  #mainApp{ display:none; padding:28px; max-width:1100px; margin:20px auto; }
-
-  .topbar{ display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:18px;}
-  .site-title{ font-weight:700; font-size:18px;}
-  .menu{ display:flex; gap:10px; }
-  .menu button{ background:transparent; border:1px solid rgba(255,255,255,0.04); padding:8px 10px; border-radius:8px; color:var(--muted); cursor:pointer;}
-  .info{ cursor:pointer; margin-left:8px; color:var(--muted); font-size:14px; }
-
-  /* message box */
-  .message-box{ background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01)); border-radius:12px; padding:16px; border:1px solid rgba(255,255,255,0.03); display:flex; flex-direction:column; gap:8px;}
-  .msg-row{ display:flex; justify-content:space-between; align-items:center; gap:10px; }
-  .msg-text{ font-size:15px; color:#dff8ff; }
-  .meta{ color:var(--muted); font-size:13px; }
-  .controls{ display:flex; gap:8px; }
-  .small-btn{ padding:8px 10px; border-radius:9px; border:none; cursor:pointer; background:rgba(255,255,255,0.03); color:var(--muted); }
-
-  /* hidden sections */
-  .hidden-section{ display:none; margin-top:12px; gap:10px; }
-  .card{ padding:12px; border-radius:10px; border:1px dashed rgba(255,255,255,0.03); background:rgba(255,255,255,0.01); }
-
-  /* user input box */
-  .user-input{ display:none; margin-top:12px; gap:8px; }
-  textarea{ width:100%; min-height:90px; background:transparent; border-radius:8px; border:1px solid rgba(255,255,255,0.04); padding:10px; color:inherit; }
-
-  footer{ color:var(--muted); font-size:13px; margin-top:16px; text-align:center;}
-
-  /* responsive */
-  @media (max-width:600px){ .pass-row{flex-direction:column;} .topbar{flex-direction:column; align-items:flex-start;} }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Experience</title>
+    <style>
+        .browser-notice {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .buttons {
+            margin-top: 15px;
+        }
+        button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-
-<div class="center">
-  <div class="lock-card" id="lockCard" role="dialog" aria-label="Unlock site">
-    <h1 id="lockTitle">नमस्ते — इस साइट पर पहुँच सुरक्षित है</h1>
-    <p class="lead" id="lockLead">कृपया सही पासवर्ड डालें। आप चाहें तो नीचे दिए गए सुझाव पढ़कर भी पासवर्ड डाल सकते हैं।</p>
-
-    <div class="pass-row">
-      <input id="passwordInput" class="pass" placeholder="पासवर्ड लिखें..." aria-label="Password input" />
-      <button class="btn" id="unlockBtn">Unlock</button>
+    <div class="browser-notice" id="browserNotice">
+        <h3>For Best Experience</h3>
+        <p>This site is optimized for Google Chrome</p>
+        <div class="buttons">
+            <button onclick="openInChrome()">Open in Chrome</button>
+            <button onclick="continueAnyway()">Continue Anyway</button>
+        </div>
     </div>
-
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
-      <div class="muted">पासवर्ड गलत होने पर साइट बोलकर बता देगी।</div>
-      <div style="display:flex; align-items:center;">
-        <button class="small-btn" id="helpBtn">किस तरह काम करता है?</button>
-        <span class="info" title="i">i</span>
-      </div>
-    </div>
-
-    <div style="margin-top:10px; font-size:13px; color:var(--muted);">
-      <strong>सुन्दर सुझाव (उदाहरण):</strong> admin123 , mera_paas , welcome2025
-    </div>
-  </div>
-</div>
-
-<!-- MAIN APP (hidden until correct password) -->
-<main id="mainApp" role="main">
-  <div class="topbar">
-    <div>
-      <div class="site-title">प्राइवेट साइट — आपका स्वागत है</div>
-      <div class="muted">यहाँ आपकी निजी सामग्री और मैसेजेस मिलेंगे</div>
-    </div>
-
-    <div class="menu">
-      <button id="toggleMessagesBtn">Message Box</button>
-      <button id="toggleHiddenBtn">Pages</button>
-      <button id="toggleUserInputBtn">User Input</button>
-      <button id="voiceGuideBtn">Voice Guide</button>
-    </div>
-  </div>
-
-  <!-- Message box -->
-  <section id="messageSection" class="message-box card">
-    <div class="msg-row">
-      <div>
-        <div class="msg-text" id="adminMessage">Loading message...</div>
-        <div class="meta" id="msgTime">—</div>
-      </div>
-      <div class="controls">
-        <button class="small-btn" id="readBtn">👉 पढ़कर सुनाओ</button>
-        <button class="small-btn" id="editLocalBtn" title="Download messages as JSON">🔽 Download</button>
-        <button class="small-btn" id="hideMsgBtn">Hide</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Hidden Pages -->
-  <section id="hiddenPages" class="hidden-section">
-    <div class="card">
-      <strong>Photos</strong>
-      <div class="muted">यह सेक्शन hidden है — admin द्वारा प्रकाशित होने पर दिखेगा</div>
-      <div id="photosArea" style="margin-top:8px;"></div>
-    </div>
-
-    <div class="card" style="margin-top:8px;">
-      <strong>Videos</strong>
-      <div class="muted">वीडियो / embed links यहाँ जोड़ें</div>
-      <div id="videosArea" style="margin-top:8px;"></div>
-    </div>
-
-    <div class="card" style="margin-top:8px;">
-      <strong>Notes (Hidden)</strong>
-      <div id="notesArea" style="margin-top:8px;"></div>
-    </div>
-  </section>
-
-  <!-- User input area -->
-  <section id="userInputArea" class="user-input card">
-    <strong>User Message (Hidden by default)</strong>
-    <div class="muted">यहाँ उपयोगकर्ता अपना संदेश लिखकर भेज सकता है — यह localStorage में रखेगा।</div>
-    <textarea id="userMsg" placeholder="अपना संदेश यहाँ लिखें..."></textarea>
-    <div style="display:flex; gap:8px; margin-top:8px;">
-      <button class="small-btn" id="sendUserMsg">Send</button>
-      <button class="small-btn" id="downloadUserMsgs">Download Saved</button>
-      <button class="small-btn" id="clearUserMsgs">Clear</button>
-    </div>
-
-    <div id="savedUserMsgs" style="margin-top:12px;"></div>
-  </section>
-
-  <footer>Site powered by simple Web TTS + GitHub Pages • Admin can edit <code>messages.json</code> in repo to update message</footer>
-</main>
-
-<script>
-/* ============================
-   Configuration
-   ============================ */
-const ADMIN_PASSWORD = "admin123"; // change this before publishing (or better: keep it and share only)
-const MESSAGES_JSON = "messages.json"; // should be present in repo root
-
-/* ============================
-   Helpers: TTS speak
-   ============================ */
-function speak(text){
-  if(!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const ut = new SpeechSynthesisUtterance(text);
-  // prefer Hindi voice if available
-  const voices = window.speechSynthesis.getVoices();
-  let chosen = voices.find(v => /hi|hindi/i.test(v.lang)) || voices.find(v => /en/i.test(v.lang)) || voices[0];
-  if(chosen) ut.voice = chosen;
-  ut.lang = chosen?.lang || 'hi-IN';
-  ut.rate = 1;
-  window.speechSynthesis.speak(ut);
-}
-
-/* ============================
-   Lock screen logic
-   ============================ */
-const lockCard = document.getElementById('lockCard');
-const passwordInput = document.getElementById('passwordInput');
-const unlockBtn = document.getElementById('unlockBtn');
-const helpBtn = document.getElementById('helpBtn');
-const lockTitle = document.getElementById('lockTitle');
-const lockLead = document.getElementById('lockLead');
-
-function announceLockIntro(){
-  speak("कृपया सही पासवर्ड दर्ज करें ताकि आप साइट के अंदर जा सकें। यदि पासवर्ड गलत होगा तो मैं आपको बता दूँगा।");
-}
-announceLockIntro();
-
-helpBtn.addEventListener('click', ()=>{
-  speak("यह लॉक स्क्रीन है। पासवर्ड डालने के बाद Enter दबाएँ। पासवर्ड सही होने पर मैं स्वागत करुँगा और साइट खुल जाएगी।");
-});
-
-unlockBtn.addEventListener('click', tryUnlock);
-passwordInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') tryUnlock(); });
-
-function tryUnlock(){
-  const val = passwordInput.value.trim();
-  if(!val){ lockCard.classList.add('shake'); setTimeout(()=> lockCard.classList.remove('shake'),700); speak("कृपया पासवर्ड भरें।"); return; }
-  if(val === ADMIN_PASSWORD){
-    speak("स्वागत है, आप सफलतापूर्वक अंदर आ चुके हैं!");
-    openMainApp();
-  } else {
-    lockCard.classList.add('shake');
-    setTimeout(()=> lockCard.classList.remove('shake'),700);
-    speak("गलत पासवर्ड, कृपया दोबारा प्रयास करें।");
-    lockLead.textContent = "गलत पासवर्ड — ध्यान से डालिए।";
-  }
-}
-
-/* ============================
-   Reveal main app
-   ============================ */
-const mainApp = document.getElementById('mainApp');
-function openMainApp(){
-  document.querySelector('.center').style.display = 'none';
-  mainApp.style.display = 'block';
-  // optionally announce main UI
-  setTimeout(()=>{
-    speak("मुख्य पृष्ठ खुल गया है। ऊपर मेन्यू में Message Box, Pages और User Input मिलेंगे। किसी भी बटन के पास i आइकन दबाकर आप और जानकारी सुन सकते हैं।");
-  }, 300);
-}
-
-/* ============================
-   Load admin message from messages.json
-   ============================ */
-const adminMessageEl = document.getElementById('adminMessage');
-const msgTimeEl = document.getElementById('msgTime');
-const readBtn = document.getElementById('readBtn');
-const editLocalBtn = document.getElementById('editLocalBtn');
-const hideMsgBtn = document.getElementById('hideMsgBtn');
-
-async function loadAdminMessage(){
-  try{
-    const res = await fetch(MESSAGES_JSON + "?noCache=" + Date.now());
-    if(!res.ok) throw new Error("No message file");
-    const data = await res.json();
-    // expected structure: { "message": "...", "timestamp": "2025-12-05T19:42:00Z" }
-    const msg = data.message || "कोई संदेश उपलब्ध नहीं।";
-    adminMessageEl.textContent = msg;
-    const ts = data.timestamp ? new Date(data.timestamp) : new Date();
-    // Hindi formatted date and time
-    const fmt = new Intl.DateTimeFormat('hi-IN', { dateStyle: 'long', timeStyle: 'short' });
-    msgTimeEl.textContent = fmt.format(ts);
-  } catch(err){
-    adminMessageEl.textContent = "Admin message नहीं मिला। Admin messages.json को repo में डालें।";
-    msgTimeEl.textContent = "";
-  }
-}
-loadAdminMessage();
-
-readBtn.addEventListener('click', ()=>{
-  const txt = adminMessageEl.textContent || "कोई संदेश उपलब्ध नहीं।";
-  speak("मैसेज पढ़ रहा हूँ। " + txt);
-});
-
-editLocalBtn.addEventListener('click', async ()=>{
-  // download current messages.json content for admin editing offline
-  try{
-    const res = await fetch(MESSAGES_JSON + "?noCache=" + Date.now());
-    let text = await res.text();
-    const blob = new Blob([text], {type: "application/json"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = "messages.json"; document.body.appendChild(a); a.click();
-    a.remove(); URL.revokeObjectURL(url);
-    speak("messages.json फाइल डाउनलोड कर दी गयी है, आप इसे GitHub पर edit कर के नए संदेश डाल सकते हैं।");
-  } catch(e){
-    speak("messages.json डाउनलोड करने में समस्या। कृपया repo में यह फ़ाइल बनाएँ।");
-  }
-});
-
-hideMsgBtn.addEventListener('click', ()=>{
-  const sec = document.getElementById('messageSection');
-  if(sec.style.display === 'none'){ sec.style.display='block'; hideMsgBtn.textContent='Hide'; }
-  else { sec.style.display='none'; hideMsgBtn.textContent='Show'; }
-});
-
-/* ============================
-   Toggle sections & info voice
-   ============================ */
-document.getElementById('toggleMessagesBtn').addEventListener('click', ()=>{
-  const s = document.getElementById('messageSection');
-  s.style.display = (s.style.display === 'none' || s.style.display === '') ? 'block' : 'none';
-  speak("Message Box टॉगल किया गया।");
-});
-
-document.getElementById('toggleHiddenBtn').addEventListener('click', ()=>{
-  const s = document.getElementById('hiddenPages');
-  s.style.display = (s.style.display === 'none' || s.style.display === '') ? 'flex' : 'none';
-  speak("Pages सेक्शन टॉगल कर दिया गया। यहाँ Photos, Videos और Notes हैं।");
-});
-
-document.getElementById('toggleUserInputBtn').addEventListener('click', ()=>{
-  const s = document.getElementById('userInputArea');
-  s.style.display = (s.style.display === 'none' || s.style.display === '') ? 'block' : 'none';
-  speak("User Input बॉक्स टॉगल किया गया। उपयोगकर्ता यहाँ अपना संदेश लिख सकते हैं।");
-});
-
-document.getElementById('voiceGuideBtn').addEventListener('click', ()=>{
-  speak("मैं आपकी मदद के लिए यहाँ हूँ। किसी भी बटन के पास 'i' दबाएं या पढ़कर सुनाओ दबाएं।");
-});
-
-/* info icons: explain elements on demand (simple example) */
-document.querySelectorAll('.info').forEach(el=>{
-  el.addEventListener('click', ()=> speak("यह एक जानकारी आइकन है। इसे दबाने पर मैं उस चीज़ के बारे में आवाज़ में बताऊँगा।"));
-});
-
-/* ============================
-   Hidden content placeholders (admin can update index or messages.json to populate)
-   ============================ */
-const photosArea = document.getElementById('photosArea');
-const videosArea = document.getElementById('videosArea');
-const notesArea = document.getElementById('notesArea');
-
-function populateHiddenContent(){
-  // default placeholders; admin can edit this part of index.html or implement fetch to repo JSON for dynamic content
-  photosArea.innerHTML = '<div class="muted">कोई फोटो प्रकाशित नहीं की गयी।</div>';
-  videosArea.innerHTML = '<div class="muted">कोई वीडियो प्रकाशित नहीं है।</div>';
-  notesArea.innerHTML = '<div class="muted">No notes published.</div>';
-}
-populateHiddenContent();
-
-/* ============================
-   User messages handling (localStorage)
-   ============================ */
-const sendUserMsg = document.getElementById('sendUserMsg');
-const downloadUserMsgs = document.getElementById('downloadUserMsgs');
-const clearUserMsgs = document.getElementById('clearUserMsgs');
-const savedUserMsgs = document.getElementById('savedUserMsgs');
-
-function getUserMsgs(){ return JSON.parse(localStorage.getItem('userMsgs_v1')||'[]'); }
-function renderUserMsgs(){
-  const arr = getUserMsgs();
-  if(arr.length===0) savedUserMsgs.innerHTML = '<div class="muted">No user messages saved.</div>';
-  else {
-    savedUserMsgs.innerHTML = arr.map((m,i)=>`<div style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);margin-bottom:8px;">
-      <div style="font-size:14px">${escapeHtml(m.text)}</div>
-      <div class="muted" style="font-size:12px;margin-top:6px;">${new Intl.DateTimeFormat('hi-IN',{dateStyle:'medium', timeStyle:'short'}).format(new Date(m.at))}</div>
-      <div style="margin-top:6px;"><button class="small-btn" onclick="speak('${escapeForSpeech(m.text)}')">🔊 सुनो</button></div>
-    </div>`).join('');
-  }
-}
-function escapeHtml(s){ return (s+'').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
-function escapeForSpeech(s){ return (s+'').replace(/'/g,""); }
-
-sendUserMsg.addEventListener('click', ()=>{
-  const txt = document.getElementById('userMsg').value.trim();
-  if(!txt){ speak("कृपया संदेश लिखें।"); return; }
-  const arr = getUserMsgs();
-  arr.push({ text: txt, at: new Date().toISOString() });
-  localStorage.setItem('userMsgs_v1', JSON.stringify(arr));
-  document.getElementById('userMsg').value = '';
-  renderUserMsgs();
-  speak("आपका संदेश सुरक्षित कर दिया गया।");
-});
-
-downloadUserMsgs.addEventListener('click', ()=>{
-  const arr = getUserMsgs();
-  const blob = new Blob([JSON.stringify(arr, null, 2)], {type: "application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href = url; a.download = 'user-messages.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-  speak("आपके संदेशों को डाउनलोड किया जा रहा है।");
-});
-
-clearUserMsgs.addEventListener('click', ()=>{
-  localStorage.removeItem('userMsgs_v1'); renderUserMsgs(); speak("सभी user संदेश हटाये गये।");
-});
-
-// initial render
-renderUserMsgs();
-
-/* ============================
-   On first load: hide some sections by default
-   ============================ */
-document.getElementById('messageSection').style.display = 'block';
-document.getElementById('hiddenPages').style.display = 'none';
-document.getElementById('userInputArea').style.display = 'none';
-
-/* ============================
-   Load admin message periodically (optional)
-   ============================ */
-setInterval(loadAdminMessage, 60_000); // refresh every minute
-</script>
+    
+    <script>
+        // सिर्फ Chrome के अलावा दूसरे ब्राउज़र में नोटिस दिखाएँ
+        const isChrome = /chrome|chromium|crios/.test(navigator.userAgent.toLowerCase()) && !/edg/.test(navigator.userAgent.toLowerCase());
+        
+        if (!isChrome) {
+            document.getElementById('browserNotice').style.display = 'block';
+        } else {
+            document.getElementById('browserNotice').style.display = 'none';
+            // Chrome में सीधे रीडायरेक्ट
+            window.location.href = "https://deepakkumar12345678.github.io/DARK_KING/";
+        }
+        
+        function openInChrome() {
+            const url = "https://deepakkumar12345678.github.io/DARK_KING/";
+            window.location.href = "googlechrome://" + url;
+        }
+        
+        function continueAnyway() {
+            document.getElementById('browserNotice').style.display = 'none';
+            window.location.href = "https://deepakkumar12345678.github.io/DARK_KING/";
+        }
+    </script>
 </body>
 </html>
